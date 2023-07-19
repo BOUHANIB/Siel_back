@@ -1,8 +1,8 @@
 package ma.livre.livreexposant.Controller;
 
 import ma.livre.livreexposant.Service.LivreService;
+import ma.livre.livreexposant.payload.Dto.ExposantDto;
 import ma.livre.livreexposant.payload.Dto.LivreDto;
-import ma.livre.livreexposant.payload.Dto.LivreRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +22,8 @@ public class LivreController {
     //livre/create
     @PostMapping("/create")
     @ResponseBody
-    public ResponseEntity<LivreDto> createLivre(@RequestBody LivreRequest livre) {
-        LivreDto createLivre = livreService.createLivre(livre, livre.getExposantId());
+    public ResponseEntity<LivreDto> create(@RequestBody LivreDto livre) {
+        LivreDto createLivre = livreService.create(livre, livre.getExposantId());
         return new ResponseEntity<LivreDto>(createLivre, HttpStatus.CREATED);
     }
 
@@ -51,7 +51,7 @@ public class LivreController {
     //update livre
     @PutMapping("/update/{livreId}")
     public ResponseEntity<LivreDto> updateLivre(@PathVariable int livreId, @RequestBody LivreDto newlivre) {
-        LivreDto updateLivre = livreService.updateLivre(livreId, newlivre);
+        LivreDto updateLivre = livreService.updateLivre(newlivre,livreId);
         return new ResponseEntity<LivreDto>(updateLivre, HttpStatus.ACCEPTED);
     }
 
@@ -60,5 +60,11 @@ public class LivreController {
     public ResponseEntity<List<LivreDto>> getLivrebyExposant(@PathVariable int expId) {
         List<LivreDto> findLivreByExposant = this.livreService.findLivreByExposant(expId);
         return new ResponseEntity<List<LivreDto>>(findLivreByExposant, HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<LivreDto>> searchLivres(@RequestParam String keyword) {
+        List<LivreDto> searchResult = livreService.searchByKeyword(keyword);
+        return new ResponseEntity<>(searchResult, HttpStatus.OK);
     }
 }

@@ -7,14 +7,8 @@ import ma.livre.livreexposant.Repository.ExposantRepository;
 import ma.livre.livreexposant.Repository.LivreRepository;
 import ma.livre.livreexposant.payload.Dto.ExposantDto;
 import ma.livre.livreexposant.payload.Dto.LivreDto;
-import ma.livre.livreexposant.payload.Dto.LivreRequest;
-import ma.livre.livreexposant.payload.LivreResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,31 +26,22 @@ public class LivreService {
     private ModelMapper mapper;
 
     //livre/create
-    public LivreDto createLivre(LivreRequest livreRequest, int catid) {
+    public LivreDto create(LivreDto livreDto, int expid) {
         //Fech Exposant where we want to add Livre
-        Exposant exp = this.expRepo.findById(catid).orElseThrow(() ->
-                new ResourceNotFoundException(+catid + " This Exposant id not found Exposant"));
-
+        Exposant exp = this.expRepo.findById(expid).orElseThrow(() ->
+                new ResourceNotFoundException(+expid + " This Exposant id not found Exposant"));
         //LivreDto to Livre
-        Livre livre = toEntity(livreRequest);
+        Livre livre = this.mapper.map(livreDto,Livre.class);
         livre.setExposant(exp);
         Livre save = this.livreRepo.save(livre);
         //Livre to LivreDto
-        LivreDto dto = toDto(save);
-        return dto;
+        return this.mapper.map(save,LivreDto.class);
     }
 
     //view Livres
     public List<LivreDto> viewAll() {
-
         List<Livre> findAll = this.livreRepo.findAll();
         List<LivreDto> livreDto = findAll.stream().map(l -> this.toDto(l)).collect(Collectors.toList());
-
-        //LivreDto to Livre
-        //List<Livre> findAll = livreRepo.findAll();
-
-        //Livre to LivreDto
-        //List<LivreDto> findAllDto = findAll.stream().map(livre -> this.toDto(livre)).collect(Collectors.toList());
         return livreDto;
     }
 
@@ -64,19 +49,19 @@ public class LivreService {
     public LivreDto viewLivreById(int lid) {
         Livre findById = livreRepo.findById(lid).orElseThrow(() ->
                 new ResourceNotFoundException(+lid + " from this livre id livre not found"));
-        LivreDto dto = this.toDto(findById);
-        return dto;
+        return this.mapper.map(findById,LivreDto.class);
+
     }
 
     //delete livre
     public void deleteLivre(int lid) {
         Livre byId = livreRepo.findById(lid).orElseThrow(() ->
                 new ResourceNotFoundException(+lid + " from this livre id livre not found"));
-        livreRepo.delete(byId);
+        this.livreRepo.delete(byId);
     }
 
     //update livre
-    public LivreDto updateLivre(int lid, LivreDto newl) {
+    public LivreDto updateLivre(LivreDto newl,int lid) {
         Livre oldl = livreRepo.findById(lid).orElseThrow(() ->
                 new ResourceNotFoundException(+lid + "livre Not found"));
         oldl.setTitre(newl.getTitre());
@@ -92,9 +77,9 @@ public class LivreService {
             oldl.setExposant(exposant);
         }
 
-        Livre save = livreRepo.save(oldl);
-        LivreDto dto = toDto(save);
-        return dto;
+        Livre save = this.livreRepo.save(oldl);
+        return this.mapper.map(save,LivreDto.class);
+
     }
 
     //Find livre by Exposant
@@ -104,21 +89,6 @@ public class LivreService {
         List<Livre> findByExposant = this.livreRepo.findByExposant(Exp);
         List<LivreDto> collect = findByExposant.stream().map(livre -> toDto(livre)).collect(Collectors.toList());
         return collect;
-    }
-
-    //LivreDto to Livre
-    public Livre toEntity(LivreRequest livreRequest) {
-/*
-        Livre l = new Livre();
-        l.setLivreId(lDto.getLivreId());
-        l.setTitre(lDto.getTitre());
-        l.setAuteur(lDto.getAuteur());
-        l.setEditeur(lDto.getEditeur());
-        l.setDate_edition(lDto.getDate_edition());
-        l.setPrix(lDto.getPrix());
-        l.setIsbn(lDto.getIsbn());
-*/
-        return this.mapper.map(livreRequest, Livre.class);
     }
 
     //Livre to LivreDto
@@ -149,6 +119,11 @@ public class LivreService {
         //Then Set Exposant Dto in Livre Dto
         lDto.setExposant(expDto);
         return lDto;
+    }
+
+    public List<LivreDto> searchByKeyword(String keyword) {
+        List<Livre> searchResult = livreRepo.findByTitreContains(keyword);
+        return searchResult.stream().map(exp -> mapper.map(exp, LivreDto.class)).collect(Collectors.toList());
     }
 
 }

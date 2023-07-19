@@ -1,4 +1,4 @@
-package ma.livre.livreexposant.payload.Dto;
+/*package ma.livre.livreexposant.payload.Dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,3 +16,6 @@ public class LivreRequest {
     private String isbn;
     private int exposantId;
 }
+
+
+ */

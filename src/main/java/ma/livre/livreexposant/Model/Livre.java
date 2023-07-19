@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class Livre {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int livreId;
+    private int LivreId;
     private String titre;
     private String auteur;
     private String editeur;

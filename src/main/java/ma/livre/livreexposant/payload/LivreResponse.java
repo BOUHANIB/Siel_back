@@ -1,4 +1,4 @@
-package ma.livre.livreexposant.payload;
+/*package ma.livre.livreexposant.payload;
 
 import lombok.Data;
 import ma.livre.livreexposant.payload.Dto.LivreDto;
@@ -14,3 +14,6 @@ public class LivreResponse {
     private int totalPages;
     private boolean lastPage;
 }
+
+
+ */

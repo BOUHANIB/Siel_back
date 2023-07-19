@@ -57,6 +57,7 @@ public class ExposantService {
         oldExp.setPays(newexp.getPays());
         oldExp.setE_mail(newexp.getE_mail());
         oldExp.setTelephone(newexp.getTelephone());
+        oldExp.setPassword(newexp.getPassword());
         oldExp.setSite_Web(newexp.getSite_Web());
         oldExp.setAdresse(newexp.getAdresse());
         oldExp.setResponsable_Salle(newexp.getResponsable_Salle());
@@ -67,40 +68,10 @@ public class ExposantService {
         return this.mapper.map(save,ExposantDto.class);
     }
 
-/*
-    //ExposantDto to Exposant
-    public Exposant toEntity(ExposantDto eDto) {
-        Exposant e = new Exposant();
-        e.setExposantId(eDto.getExposantId());
-        e.setNom(eDto.getNom());
-        e.setPays(eDto.getPays());
-        e.setE_mail(eDto.getE_mail());
-        e.setTelephone(eDto.getTelephone());
-        e.setSite_Web(eDto.getSite_Web());
-        e.setAdresse(eDto.getAdresse());
-        e.setResponsable_Salle(eDto.getResponsable_Salle());
-        e.setResponsable(eDto.getResponsable());
-        e.setSpecialite(eDto.getSpecialite());
-        e.setLocalisation(eDto.getLocalisation());
-        return e;
-    }
 
-    //Exposant to ExposantDto
-    public ExposantDto toDto(Exposant exposant) {
-        ExposantDto eDto = new ExposantDto();
-        eDto.setExposantId(exposant.getExposantId());
-        eDto.setNom(exposant.getNom());
-        eDto.setPays(exposant.getPays());
-        eDto.setE_mail(exposant.getE_mail());
-        eDto.setTelephone(exposant.getTelephone());
-        eDto.setSite_Web(exposant.getSite_Web());
-        eDto.setAdresse(exposant.getAdresse());
-        eDto.setResponsable_Salle(exposant.getResponsable_Salle());
-        eDto.setResponsable(exposant.getResponsable());
-        eDto.setSpecialite(exposant.getSpecialite());
-        eDto.setLocalisation(exposant.getLocalisation());
-        return eDto;
+    // Search exposants by keyword (name containing the keyword)
+    public List<ExposantDto> searchByKeyword(String keyword) {
+        List<Exposant> searchResult = expRepo.findByNomContains(keyword);
+        return searchResult.stream().map(exp -> mapper.map(exp, ExposantDto.class)).collect(Collectors.toList());
     }
-
- */
 }

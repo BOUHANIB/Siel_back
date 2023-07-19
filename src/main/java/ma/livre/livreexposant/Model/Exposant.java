@@ -19,6 +19,7 @@ public class Exposant {
     private String nom;
     private String pays;
     private String e_mail;
+    private String password;
     private String telephone;
     private String site_Web;
     private String adresse;

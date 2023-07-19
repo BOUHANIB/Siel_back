@@ -5,6 +5,9 @@ import ma.livre.livreexposant.Service.ExposantService;
 import ma.livre.livreexposant.payload.ApiResponse;
 import ma.livre.livreexposant.payload.Dto.ExposantDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +27,7 @@ public class ExposantController {
     @PostMapping("/create")
     @ResponseBody
     public ResponseEntity<ExposantDto> create(@RequestBody ExposantDto expDto) {
-        expDto.setLocalisation(null);
+        //expDto.setLocalisation(null);
         ExposantDto create = this.expService.create(expDto);
         return new ResponseEntity<ExposantDto>(create, HttpStatus.CREATED);
     }
@@ -57,4 +60,10 @@ public class ExposantController {
         return new ResponseEntity<ExposantDto>(update, HttpStatus.OK);
     }
 
+    // Search exposants by name
+    @GetMapping("/search")
+    public ResponseEntity<List<ExposantDto>> searchExposants(@RequestParam String keyword) {
+        List<ExposantDto> searchResult = expService.searchByKeyword(keyword);
+        return new ResponseEntity<>(searchResult, HttpStatus.OK);
+    }
 }

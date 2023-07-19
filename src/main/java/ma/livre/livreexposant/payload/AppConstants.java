@@ -1,4 +1,4 @@
-package ma.livre.livreexposant.payload;
+/*package ma.livre.livreexposant.payload;
 
 public class AppConstants {
 
@@ -8,3 +8,6 @@ public class AppConstants {
     public static final String Sort_DIR_STRING="asc";
 
 }
+
+
+ */

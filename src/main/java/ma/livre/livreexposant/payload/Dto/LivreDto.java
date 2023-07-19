@@ -16,4 +16,6 @@ public class LivreDto {
     private double prix;
     private String isbn;
     private ExposantDto exposant;
+    private int exposantId;
 }
+

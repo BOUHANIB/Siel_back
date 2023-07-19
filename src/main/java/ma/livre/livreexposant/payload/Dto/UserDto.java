@@ -1,4 +1,4 @@
-package ma.livre.livreexposant.payload.Dto;
+/*package ma.livre.livreexposant.payload.Dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,3 +21,6 @@ public class UserDto {
     private Date date;
     private boolean  active;
 }
+
+
+ */
